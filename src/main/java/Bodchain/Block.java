@@ -1,14 +1,14 @@
-package com.build;
+package Bodchain;
 import java.util.Date;
 
-public class block {
+public class Block {
     String hash;
     String previousHash;
     String data;
     long timeStamp;
     int nonce;
 
-    public block(String data, String previousHash) {
+    public Block(String data, String previousHash) {
         this.data = data;
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
@@ -17,7 +17,7 @@ public class block {
 
     public String calculateHash() {
         String input = previousHash + Long.toString(timeStamp) + Integer.toString(nonce)+ data;
-        return stringUtil.applySha256(input);
+        return StringUtil.applySha256(input);
     }
 
     public void mineBlock(int difficulty) {

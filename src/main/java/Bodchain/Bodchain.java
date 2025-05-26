@@ -1,16 +1,31 @@
-package com.build;
+package Bodchain;
 
+import java.security.Security;
 import java.util.ArrayList;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class Bodchain {
-    static int difficulty = 6; // Difficulty level for mining
-    public static ArrayList<block> blockchain = new ArrayList<>();
+
+    public static ArrayList<Block> blockchain = new ArrayList<>();
+    public static int difficulty = 5; // Difficulty level for mining
+    public static Wallet walletA;
+    public static Wallet walletB;
+
     public static void main(String[] args) {
-        blockchain.add(new block("First Block", "0"));
+        Security.addProvider(new BouncyCastleProvider());
+
+        walletA = new Wallet();
+        walletB = new Wallet();
+        System.out.println("Public and private keys of wallet A: ");
+        System.out.println(StringUtil.stringFromKey(walletA.publicKey)+" "+StringUtil.stringFromKey(walletA.privateKey));
+    }
+
+    void mineBlock(){
+        blockchain.add(new Block("First Block", "0"));
         blockchain.get(0).mineBlock(difficulty);
-        blockchain.add(new block("Second Block", blockchain.get(0).hash));
+        blockchain.add(new Block("Second Block", blockchain.get(0).hash));
         blockchain.get(1).mineBlock(difficulty);
-        blockchain.add(new block("Third Block", blockchain.get(1).hash));   
+        blockchain.add(new Block("Third Block", blockchain.get(1).hash));   
         blockchain.get(2).mineBlock(difficulty);
 
         // for(block b: blockchain){
@@ -21,8 +36,8 @@ public class Bodchain {
     }
 
     public static boolean isChainValid(){
-        block currentBlock;
-        block prevBlock;
+        Block currentBlock;
+        Block prevBlock;
         String target = new String(new char[difficulty]).replace('\0', '0');
         for(int i=1;i<blockchain.size();i++){
             currentBlock = blockchain.get(i);
